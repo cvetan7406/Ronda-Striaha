@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
+import { sendContactForm } from "@/lib/utils"
 import type { Dictionary, Locale } from "@/lib/types"
 
 interface ContactFormProps {
@@ -18,6 +18,7 @@ export default function ContactForm({ dictionary, lang }: ContactFormProps) {
     message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState("")
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -27,13 +28,23 @@ export default function ContactForm({ dictionary, lang }: ContactFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitMessage("")
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      const result = (await sendContactForm(formData)) as { success: boolean; message: string }
 
-    alert(lang === "bg" ? "Съобщението е изпратено успешно!" : "Το μήνυμα στάλθηκε επιτυχώς!")
-    setIsSubmitting(false)
-    setFormData({ name: "", email: "", subject: "", message: "" })
+      if (result.success) {
+        setSubmitMessage(lang === "bg" ? "Съобщението е изпратено успешно!" : "Το μήνυμα στάλθηκε επιτυχώς!")
+        setFormData({ name: "", email: "", subject: "", message: "" })
+      } else {
+        setSubmitMessage(lang === "bg" ? "Възникна грешка при изпращането." : "Παρουσιάστηκε σφάλμα κατά την αποστολή.")
+      }
+    } catch (error) {
+      setSubmitMessage(lang === "bg" ? "Възникна грешка при изпращането." : "Παρουσιάστηκε σφάλμα κατά την αποστολή.")
+    } finally {
+      setIsSubmitting(false)
+      setTimeout(() => setSubmitMessage(""), 5000)
+    }
   }
 
   return (
@@ -101,6 +112,14 @@ export default function ContactForm({ dictionary, lang }: ContactFormProps) {
           className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary resize-vertical"
         />
       </div>
+
+      {submitMessage && (
+        <div
+          className={`p-3 rounded-md ${submitMessage.includes("успешно") || submitMessage.includes("επιτυχώς") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+        >
+          {submitMessage}
+        </div>
+      )}
 
       <button
         type="submit"

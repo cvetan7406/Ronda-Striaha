@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Calendar, User, ChevronDown, ChevronUp } from "lucide-react"
+import { Calendar, User, ChevronDown, ChevronUp, Share2, Plus } from "lucide-react"
+import { addToCalendar, shareOnSocial } from "@/lib/utils"
 import type { Dictionary } from "@/lib/types"
 
 interface NewsCardProps {
@@ -21,6 +22,7 @@ interface NewsCardProps {
 
 export default function NewsCard({ article, dictionary }: NewsCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [showShareMenu, setShowShareMenu] = useState(false)
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -44,6 +46,26 @@ export default function NewsCard({ article, dictionary }: NewsCardProps) {
     }
   }
 
+  const handleAddToCalendar = () => {
+    const eventDate = new Date(article.date)
+    const endDate = new Date(eventDate)
+    endDate.setHours(endDate.getHours() + 2)
+
+    addToCalendar({
+      title: article.title,
+      start: eventDate,
+      end: endDate,
+      description: article.excerpt,
+      location: "Арадиппу, Атиену, Ксилофагу, Cyprus",
+    })
+  }
+
+  const handleShare = (platform: string) => {
+    const url = window.location.href
+    shareOnSocial(platform, url, article.title)
+    setShowShareMenu(false)
+  }
+
   return (
     <article className="hover-card bg-white rounded-lg shadow-md overflow-hidden">
       <div className="relative h-48">
@@ -56,6 +78,49 @@ export default function NewsCard({ article, dictionary }: NewsCardProps) {
         />
         <div className="absolute top-4 left-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-bold">
           {getCategoryName(article.category)}
+        </div>
+
+        {/* Action buttons */}
+        <div className="absolute top-4 right-4 flex gap-2">
+          <button
+            onClick={handleAddToCalendar}
+            className="bg-white/90 p-2 rounded-full hover:bg-white transition-colors"
+            title={dictionary.news.addToCalendar}
+          >
+            <Plus className="w-4 h-4 text-primary" />
+          </button>
+          <div className="relative">
+            <button
+              onClick={() => setShowShareMenu(!showShareMenu)}
+              className="bg-white/90 p-2 rounded-full hover:bg-white transition-colors"
+              title="Share"
+            >
+              <Share2 className="w-4 h-4 text-primary" />
+            </button>
+
+            {showShareMenu && (
+              <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg p-2 z-10">
+                <button
+                  onClick={() => handleShare("facebook")}
+                  className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
+                >
+                  Facebook
+                </button>
+                <button
+                  onClick={() => handleShare("twitter")}
+                  className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
+                >
+                  Twitter
+                </button>
+                <button
+                  onClick={() => handleShare("whatsapp")}
+                  className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
+                >
+                  WhatsApp
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

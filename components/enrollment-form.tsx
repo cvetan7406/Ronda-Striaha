@@ -1,9 +1,8 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
-import { Upload, X } from "lucide-react"
+import { Upload, X, CheckCircle } from "lucide-react"
 import type { Dictionary, Locale } from "@/lib/types"
 
 interface EnrollmentFormProps {
@@ -23,6 +22,8 @@ export default function EnrollmentForm({ dictionary, lang }: EnrollmentFormProps
   })
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState("")
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -31,7 +32,21 @@ export default function EnrollmentForm({ dictionary, lang }: EnrollmentFormProps
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
-    setUploadedFiles((prev) => [...prev, ...files])
+    const validFiles = files.filter((file) => {
+      const isValidType = ["application/pdf", "image/jpeg", "image/png"].includes(file.type)
+      const isValidSize = file.size <= 5 * 1024 * 1024 // 5MB
+      return isValidType && isValidSize
+    })
+
+    if (validFiles.length !== files.length) {
+      alert(
+        lang === "bg"
+          ? "Някои файлове са отхвърлени. Моля, качете само PDF, JPG или PNG файлове до 5MB."
+          : "Μερικά αρχεία απορρίφθηκαν. Παρακαλώ ανεβάστε μόνο PDF, JPG ή PNG αρχεία έως 5MB.",
+      )
+    }
+
+    setUploadedFiles((prev) => [...prev, ...validFiles])
   }
 
   const removeFile = (index: number) => {
@@ -41,12 +56,43 @@ export default function EnrollmentForm({ dictionary, lang }: EnrollmentFormProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitMessage("")
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    // Simulate form submission with file upload
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
-    alert(lang === "bg" ? "Заявката е изпратена успешно!" : "Η αίτηση στάλθηκε επιτυχώς!")
-    setIsSubmitting(false)
+      setIsSuccess(true)
+      setSubmitMessage(
+        lang === "bg"
+          ? "Заявката е изпратена успешно! Ще се свържем с вас скоро."
+          : "Η αίτηση στάλθηκε επιτυχώς! Θα επικοινωνήσουμε μαζί σας σύντομα.",
+      )
+
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        childName: "",
+        childAge: "",
+        ageGroup: "",
+      })
+      setUploadedFiles([])
+    } catch (error) {
+      setSubmitMessage(
+        lang === "bg"
+          ? "Възникна грешка при изпращането на заявката."
+          : "Παρουσιάστηκε σφάλμα κατά την αποστολή της αίτησης.",
+      )
+    } finally {
+      setIsSubmitting(false)
+      setTimeout(() => {
+        setSubmitMessage("")
+        setIsSuccess(false)
+      }, 5000)
+    }
   }
 
   return (
@@ -199,6 +245,15 @@ export default function EnrollmentForm({ dictionary, lang }: EnrollmentFormProps
           </div>
         )}
       </div>
+
+      {submitMessage && (
+        <div
+          className={`p-3 rounded-md flex items-center gap-2 ${isSuccess ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+        >
+          {isSuccess && <CheckCircle className="w-5 h-5" />}
+          {submitMessage}
+        </div>
+      )}
 
       <button
         type="submit"

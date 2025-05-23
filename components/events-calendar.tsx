@@ -1,7 +1,10 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
+import { Calendar, ChevronLeft, ChevronRight, Plus } from "lucide-react"
+import { addToCalendar, subscribeToNewsletter } from "@/lib/utils"
 import type { Locale } from "@/lib/types"
 
 interface Event {
@@ -17,6 +20,9 @@ interface EventsCalendarProps {
 
 export default function EventsCalendar({ lang }: EventsCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [email, setEmail] = useState("")
+  const [isSubscribing, setIsSubscribing] = useState(false)
+  const [subscriptionMessage, setSubscriptionMessage] = useState("")
 
   // Sample events - in a real app, these would come from an API or database
   const events: Event[] = [
@@ -50,6 +56,38 @@ export default function EventsCalendar({ lang }: EventsCalendarProps) {
 
   const prevMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
+  }
+
+  const handleAddToCalendar = (event: Event) => {
+    const endDate = new Date(event.date)
+    endDate.setHours(endDate.getHours() + 2) // 2 hour event
+
+    addToCalendar({
+      title: event.title,
+      start: event.date,
+      end: endDate,
+      description: event.description,
+      location: "Арадиппу, Атиену, Ксилофагу, Cyprus",
+    })
+  }
+
+  const handleNewsletterSubscription = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+
+    setIsSubscribing(true)
+    try {
+      const result = (await subscribeToNewsletter(email, lang)) as { success: boolean; message: string }
+      setSubscriptionMessage(result.message)
+      if (result.success) {
+        setEmail("")
+      }
+    } catch (error) {
+      setSubscriptionMessage(lang === "bg" ? "Възникна грешка" : "Παρουσιάστηκε σφάλμα")
+    } finally {
+      setIsSubscribing(false)
+      setTimeout(() => setSubscriptionMessage(""), 3000)
+    }
   }
 
   const monthNames = {
@@ -123,8 +161,15 @@ export default function EventsCalendar({ lang }: EventsCalendarProps) {
         >
           <span className="text-sm font-medium">{day}</span>
           {dayEvents.map((event) => (
-            <div key={event.id} className="mt-1 p-1 text-xs bg-primary text-white rounded truncate">
+            <div key={event.id} className="mt-1 p-1 text-xs bg-primary text-white rounded truncate group relative">
               {event.title}
+              <button
+                onClick={() => handleAddToCalendar(event)}
+                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                title={lang === "bg" ? "Добави в календар" : "Προσθήκη στο ημερολόγιο"}
+              >
+                <Plus className="w-3 h-3" />
+              </button>
             </div>
           ))}
         </div>,
@@ -159,20 +204,31 @@ export default function EventsCalendar({ lang }: EventsCalendarProps) {
       </div>
 
       <div className="mt-8 text-center">
-        <form className="max-w-md mx-auto">
+        <form onSubmit={handleNewsletterSubscription} className="max-w-md mx-auto">
           <div className="flex">
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder={lang === "bg" ? "Вашият имейл адрес" : "Your email address"}
               className="flex-1 px-4 py-2 border border-border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary"
+              required
             />
             <button
               type="submit"
-              className="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors"
+              disabled={isSubscribing}
+              className="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
-              {lang === "bg" ? "Абонирай се" : "Subscribe"}
+              {isSubscribing
+                ? lang === "bg"
+                  ? "Зареждане..."
+                  : "Φόρτωση..."
+                : lang === "bg"
+                  ? "Абонирай се"
+                  : "Subscribe"}
             </button>
           </div>
+          {subscriptionMessage && <p className="mt-2 text-sm text-green-600">{subscriptionMessage}</p>}
           <p className="mt-2 text-sm text-muted-foreground">
             {lang === "bg"
               ? "Абонирайте се за нашия календар с предстоящи събития"

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { BookOpen, Download, Eye, Calendar } from "lucide-react"
+import { BookOpen, Download, Eye, Calendar, Share2 } from "lucide-react"
 import type { Dictionary, Locale } from "@/lib/types"
 
 interface InteractiveDocumentsProps {
@@ -44,12 +44,28 @@ export default function InteractiveDocuments({ dictionary, lang }: InteractiveDo
   }
 
   const downloadDocument = (file: string, title: string) => {
+    // Create a temporary link element
     const link = document.createElement("a")
     link.href = file
-    link.download = title
+    link.download = title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + (file.includes(".html") ? ".html" : ".jpg")
+    link.target = "_blank"
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+
+    // Show success message
+    const message = lang === "bg" ? "Файлът се изтегля..." : "Το αρχείο κατεβαίνει..."
+    alert(message)
+  }
+
+  const copyLink = async (docId: string) => {
+    const url = `${window.location.origin}${window.location.pathname}#${docId}`
+    try {
+      await navigator.clipboard.writeText(url)
+      alert(lang === "bg" ? "Линкът е копиран!" : "Ο σύνδεσμος αντιγράφηκε!")
+    } catch (err) {
+      console.error("Failed to copy: ", err)
+    }
   }
 
   return (
@@ -110,6 +126,16 @@ export default function InteractiveDocuments({ dictionary, lang }: InteractiveDo
                   >
                     <Download className="w-4 h-4" />
                     {dictionary.documents.download}
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      copyLink(doc.id)
+                    }}
+                    className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Share2 className="w-4 h-4" />
+                    {lang === "bg" ? "Копирай линк" : "Αντιγραφή συνδέσμου"}
                   </button>
                 </div>
               </div>
