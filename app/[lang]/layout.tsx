@@ -4,9 +4,10 @@ import { Montserrat } from "next/font/google"
 import "./globals.css"
 import type { Locale } from "@/lib/types"
 
+// Configure the font properly with weight ranges
 const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic", "greek"],
-  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 })
 
@@ -22,12 +23,12 @@ export async function generateStaticParams() {
 export default function RootLayout({
   children,
   params,
-}: Readonly<{
+}: {
   children: React.ReactNode
   params: { lang: Locale }
-}>) {
+}) {
   return (
-    <html lang={params.lang} className={montserrat.variable}>
+    <html lang={params.lang}>
       <body className={montserrat.className}>{children}</body>
     </html>
   )
