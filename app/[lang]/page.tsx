@@ -10,6 +10,7 @@ import WhyChooseUs from "@/components/why-choose-us"
 import TestimonialsSection from "@/components/testimonials-section"
 import PartnersSection from "@/components/partners-section"
 import SchoolLifeGallery from "@/components/school-life-gallery"
+import InteractiveDocuments from "@/components/interactive-documents"
 
 export default async function Home({ params: { lang } }: { params: { lang: Locale } }) {
   const dictionary = await getDictionary(lang)
@@ -76,7 +77,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
             {/* Quick Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 fade-in" style={{ animationDelay: "0.6s" }}>
               <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800">
-                <div className="text-2xl font-bold text-primary">20+</div>
+                <div className="text-2xl font-bold text-primary">10+</div>
                 <div className="text-sm">{lang === "bg" ? "Години опит" : "Χρόνια εμπειρίας"}</div>
               </div>
               <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800">
@@ -84,13 +85,16 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
                 <div className="text-sm">{lang === "bg" ? "Ученици" : "Μαθητές"}</div>
               </div>
               <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800">
-                <div className="text-2xl font-bold text-primary">15+</div>
-                <div className="text-sm">{lang === "bg" ? "Учители" : "Δάσκαλοι"}</div>
+                <div className="text-2xl font-bold text-primary">Б2</div>
+                <div className="text-sm">{lang === "bg" ? "Сертификация" : "Πιστοποίηση"}</div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Interactive Documents Section */}
+      <InteractiveDocuments dictionary={dictionary} lang={lang} />
 
       {/* Stats Section */}
       <StatsSection dictionary={dictionary} lang={lang} />

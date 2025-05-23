@@ -28,7 +28,7 @@ export default function ContactMap() {
         {/* Directions link */}
         <div className="absolute bottom-4 left-4">
           <a
-            href="https://maps.google.com/?q=Epaminonda+7,+Nicosia+1076,+Cyprus"
+            href="https://maps.app.goo.gl/JaHNfnYdoaZeVcDR8"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-primary text-white px-4 py-2 rounded text-sm hover:bg-primary/90 transition-colors"

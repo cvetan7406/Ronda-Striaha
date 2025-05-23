@@ -56,52 +56,52 @@ export default async function AboutPage({ params: { lang } }: { params: { lang: 
   const timelineEvents = [
     {
       id: 1,
-      year: "2004",
-      title: lang === "bg" ? "Основаване на училището" : "School Foundation",
+      year: "2015",
+      title: lang === "bg" ? "Основаване на училището" : "Ίδρυση του σχολείου",
       description:
         lang === "bg"
-          ? 'Училище "Родна Стряха" е основано от група ентусиасти с цел да съхрани българския език и култура сред децата в Кипър.'
-          : "Rodna Striha School was founded by a group of enthusiasts with the aim of preserving the Bulgarian language and culture among children in Cyprus.",
+          ? 'Българско училище "Родна стряха" отваря за първи път врати на 03/10/2015 в Арадиппу, Атиену, Ксилофагу.'
+          : "Το βουλγαρικό σχολείο Rodna Striha ανοίγει για πρώτη φορά τις πόρτες του στις 03/10/2015 στην Αραδίππου, Αθηένου, Ξυλοφάγου.",
       image: "/placeholder.svg?height=300&width=500",
     },
     {
       id: 2,
-      year: "2008",
-      title: lang === "bg" ? "Първи випуск" : "First Graduation",
+      year: "2018",
+      title: lang === "bg" ? "Стартиране на подготовка за Б2" : "Έναρξη προετοιμασίας για Β2",
       description:
         lang === "bg"
-          ? 'Първият випуск ученици завършва успешно своето образование в училище "Родна Стряха".'
-          : "The first class of students successfully completes their education at Rodna Striha School.",
+          ? "От учебната 2018/2019 стартира подготовка на кандидат-студенти за изпит за ниво на владеене на български език Б2."
+          : "Από το σχολικό έτος 2018/2019 ξεκινά η προετοιμασία υποψήφιων φοιτητών για εξέταση επιπέδου Β2 βουλγαρικής γλώσσας.",
       image: "/placeholder.svg?height=300&width=500",
     },
     {
       id: 3,
-      year: "2012",
-      title: lang === "bg" ? "Нова сграда" : "New Building",
+      year: "2019",
+      title: lang === "bg" ? "Първи изпит Б2" : "Πρώτη εξέταση Β2",
       description:
         lang === "bg"
-          ? "Училището се премества в нова, по-голяма сграда, за да посрещне нарастващия брой ученици."
-          : "The school moves to a new, larger building to accommodate the growing number of students.",
+          ? "Провеждане на първия изпит за ниво Б2 съвместно с Департамента за езиково обучение на Софийски университет."
+          : "Διεξαγωγή της πρώτης εξέτασης επιπέδου Β2 σε συνεργασία με το Τμήμα Γλωσσικής Εκπαίδευσης του Πανεπιστημίου της Σόφιας.",
       image: "/placeholder.svg?height=300&width=500",
     },
     {
       id: 4,
-      year: "2018",
-      title: lang === "bg" ? "Разширяване на програмата" : "Program Expansion",
+      year: "2020",
+      title: lang === "bg" ? "Дистанционно обучение" : "Εξ αποστάσεως εκπαίδευση",
       description:
         lang === "bg"
-          ? "Въвеждане на нови предмети и извънкласни дейности за обогатяване на образователната програма."
-          : "Introduction of new subjects and extracurricular activities to enrich the educational program.",
+          ? "Въвеждане на възможност за дистанционно обучение за ученици от по-отдалечените райони."
+          : "Εισαγωγή δυνατότητας εξ αποστάσεως εκπαίδευσης για μαθητές από πιο απομακρυσμένες περιοχές.",
       image: "/placeholder.svg?height=300&width=500",
     },
     {
       id: 5,
-      year: "2023",
-      title: lang === "bg" ? "Най-голямото българско училище в Кипър" : "The Largest Bulgarian School in Cyprus",
+      year: "2025",
+      title: lang === "bg" ? "10 години опит и доверие" : "10 χρόνια εμπειρίας και εμπιστοσύνης",
       description:
         lang === "bg"
-          ? 'Училище "Родна Стряха" се утвърждава като най-голямото българско училище в Кипър с над 200 ученици.'
-          : "Rodna Striha School establishes itself as the largest Bulgarian school in Cyprus with over 200 students.",
+          ? "Десет години градим опит и доверие в преподаването на български език. Подкрепяме се от МОН и над 20 университета."
+          : "Δέκα χρόνια χτίζουμε εμπειρία και εμπιστοσύνη στη διδασκαλία της βουλγαρικής γλώσσας. Υποστηριζόμαστε από το Υπουργείο και πάνω από 20 πανεπιστήμια.",
       image: "/placeholder.svg?height=300&width=500",
     },
   ]

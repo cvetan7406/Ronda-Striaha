@@ -36,8 +36,7 @@ export default async function ContactPage({ params: { lang } }: { params: { lang
                 </div>
                 <h3 className="text-lg font-bold mb-2">{dictionary.contact.address}</h3>
                 <p className="text-muted-foreground">
-                  Epaminonda 7<br />
-                  Nicosia 1076
+                  Арадиппу, Атиену, Ксилофагу
                   <br />
                   Cyprus
                 </p>

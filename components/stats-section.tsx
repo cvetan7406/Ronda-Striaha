@@ -16,21 +16,21 @@ export default function StatsSection({ dictionary, lang }: StatsSectionProps) {
     },
     {
       icon: <GraduationCap className="w-8 h-8" />,
-      number: "20+",
+      number: "10+",
       label: lang === "bg" ? "Години опит" : "Χρόνια εμπειρίας",
       description: lang === "bg" ? "в образованието" : "στην εκπαίδευση",
     },
     {
       icon: <Award className="w-8 h-8" />,
-      number: "50+",
-      label: lang === "bg" ? "Награди и отличия" : "Βραβεία και διακρίσεις",
-      description: lang === "bg" ? "на национално ниво" : "σε εθνικό επίπεδο",
+      number: "Б2",
+      label: lang === "bg" ? "Сертификация" : "Πιστοποίηση",
+      description: lang === "bg" ? "за университет" : "για πανεπιστήμιο",
     },
     {
       icon: <Heart className="w-8 h-8" />,
-      number: "100%",
-      label: lang === "bg" ? "Удовлетворени родители" : "Ικανοποιημένοι γονείς",
-      description: lang === "bg" ? "препоръчват училището" : "συστήνουν το σχολείο",
+      number: "20+",
+      label: lang === "bg" ? "Партньорски университета" : "Συνεργαζόμενα πανεπιστήμια",
+      description: lang === "bg" ? "подкрепят училището" : "υποστηρίζουν το σχολείο",
     },
   ]
 
@@ -43,8 +43,8 @@ export default function StatsSection({ dictionary, lang }: StatsSectionProps) {
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             {lang === "bg"
-              ? "Вече 20 години изграждаме мостове между България и Кипър чрез образованието"
-              : "Εδώ και 20 χρόνια χτίζουμε γέφυρες μεταξύ Βουλγαρίας και Κύπρου μέσω της εκπαίδευσης"}
+              ? "Вече 10 години изграждаме мостове между България и Кипър чрез образованието"
+              : "Εδώ και 10 χρόνια χτίζουμε γέφυρες μεταξύ Βουλγαρίας και Κύπρου μέσω της εκπαίδευσης"}
           </p>
         </div>
 
