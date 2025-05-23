@@ -11,16 +11,30 @@ import TestimonialsSection from "@/components/testimonials-section"
 import PartnersSection from "@/components/partners-section"
 import SchoolLifeGallery from "@/components/school-life-gallery"
 import InteractiveDocuments from "@/components/interactive-documents"
+import ParticlesBackground from "@/components/particles-background"
+import BulgarianParticles from "@/components/bulgarian-particles"
 
 export default async function Home({ params: { lang } }: { params: { lang: Locale } }) {
   const dictionary = await getDictionary(lang)
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col relative">
+      {/* Background Particles */}
+      <ParticlesBackground
+        density={40}
+        speed={0.3}
+        colors={["rgba(220, 38, 38, 0.3)", "rgba(234, 179, 8, 0.3)", "rgba(255, 255, 255, 0.2)"]}
+        types={["circle", "star", "heart"]}
+        interactive={true}
+      />
+
+      {/* Bulgarian Letters Particles */}
+      <BulgarianParticles density={20} speed={0.2} />
+
       <Header dictionary={dictionary} lang={lang} />
 
       {/* Hero Section with Video Background */}
-      <section className="video-container">
+      <section className="video-container relative">
         <video autoPlay muted loop playsInline>
           <source
             src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80"
@@ -29,7 +43,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
           Your browser does not support the video tag.
         </video>
 
-        <div className="video-overlay">
+        <div className="video-overlay relative z-10">
           <div className="max-w-6xl mx-auto text-center px-4">
             <div className="mb-6">
               <img
@@ -52,7 +66,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
               <Button
                 href={`/${lang}/about`}
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-white text-lg px-8 py-4"
+                className="bg-primary hover:bg-primary/90 text-white text-lg px-8 py-4 hover-particle-trigger"
               >
                 {dictionary.home.learnMore}
               </Button>
@@ -60,7 +74,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
                 href={`/${lang}/enrollment`}
                 size="lg"
                 variant="outline"
-                className="bg-white text-primary border-primary hover:bg-primary/10 text-lg px-8 py-4"
+                className="bg-white text-primary border-primary hover:bg-primary/10 text-lg px-8 py-4 hover-particle-trigger"
               >
                 {dictionary.home.enrollChild}
               </Button>
@@ -68,7 +82,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
                 href={`/${lang}/gallery`}
                 size="lg"
                 variant="outline"
-                className="bg-white text-primary border-primary hover:bg-primary/10 text-lg px-8 py-4"
+                className="bg-white text-primary border-primary hover:bg-primary/10 text-lg px-8 py-4 hover-particle-trigger"
               >
                 {dictionary.home.viewGallery}
               </Button>
@@ -76,15 +90,15 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
 
             {/* Quick Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 fade-in" style={{ animationDelay: "0.6s" }}>
-              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800">
+              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800 hover-card">
                 <div className="text-2xl font-bold text-primary">10+</div>
                 <div className="text-sm">{lang === "bg" ? "Години опит" : "Χρόνια εμπειρίας"}</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800">
+              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800 hover-card">
                 <div className="text-2xl font-bold text-primary">200+</div>
                 <div className="text-sm">{lang === "bg" ? "Ученици" : "Μαθητές"}</div>
               </div>
-              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800">
+              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 text-center text-gray-800 hover-card">
                 <div className="text-2xl font-bold text-primary">Б2</div>
                 <div className="text-sm">{lang === "bg" ? "Сертификация" : "Πιστοποίηση"}</div>
               </div>
@@ -94,22 +108,32 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
       </section>
 
       {/* Interactive Documents Section */}
-      <InteractiveDocuments dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <InteractiveDocuments dictionary={dictionary} lang={lang} />
+      </div>
 
       {/* Stats Section */}
-      <StatsSection dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <StatsSection dictionary={dictionary} lang={lang} />
+      </div>
 
       {/* Values Section */}
-      <ValuesSection dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <ValuesSection dictionary={dictionary} lang={lang} />
+      </div>
 
       {/* School Life Gallery */}
-      <SchoolLifeGallery dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <SchoolLifeGallery dictionary={dictionary} lang={lang} />
+      </div>
 
       {/* Why Choose Us Section */}
-      <WhyChooseUs dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <WhyChooseUs dictionary={dictionary} lang={lang} />
+      </div>
 
       {/* Upcoming Events Section */}
-      <section className="py-16 bg-muted">
+      <section className="py-16 bg-muted relative z-10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">{dictionary.home.upcomingEvents}</h2>
           <EventsCalendar lang={lang} />
@@ -117,12 +141,18 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
       </section>
 
       {/* Testimonials Section */}
-      <TestimonialsSection dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <TestimonialsSection dictionary={dictionary} lang={lang} />
+      </div>
 
       {/* Partners Section */}
-      <PartnersSection dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <PartnersSection dictionary={dictionary} lang={lang} />
+      </div>
 
-      <Footer dictionary={dictionary} lang={lang} />
+      <div className="relative z-10">
+        <Footer dictionary={dictionary} lang={lang} />
+      </div>
     </main>
   )
 }

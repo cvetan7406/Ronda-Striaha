@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Montserrat } from "next/font/google"
 import "./globals.css"
 import type { Locale } from "@/lib/types"
+import ClickParticles from "@/components/click-particles"
 
 // Configure the font properly with weight ranges
 const montserrat = Montserrat({
@@ -29,7 +30,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang={params.lang}>
-      <body className={montserrat.className}>{children}</body>
+      <body className={montserrat.className}>
+        {children}
+        <ClickParticles />
+      </body>
     </html>
   )
 }
