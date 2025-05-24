@@ -34,56 +34,56 @@ export default function MobileMenu({ dictionary, lang }: MobileMenuProps) {
           </div>
           <nav className="flex flex-col items-center space-y-6 p-4">
             <Link
-              href={`/${lang}`}
+              href={lang === "bg" ? "/" : "/el"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {nav.home}
             </Link>
             <Link
-              href={`/${lang}/about`}
+              href={lang === "bg" ? "/about" : "/el/about"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {nav.about}
             </Link>
             <Link
-              href={`/${lang}/education`}
+              href={lang === "bg" ? "/education" : "/el/education"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {nav.education}
             </Link>
             <Link
-              href={`/${lang}/activities`}
+              href={lang === "bg" ? "/activities" : "/el/activities"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {nav.activities}
             </Link>
             <Link
-              href={`/${lang}/news`}
+              href={lang === "bg" ? "/news" : "/el/news"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {nav.news}
             </Link>
             <Link
-              href={`/${lang}/gallery`}
+              href={lang === "bg" ? "/gallery" : "/el/gallery"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {nav.gallery}
             </Link>
             <Link
-              href={`/${lang}/enrollment`}
+              href={lang === "bg" ? "/enrollment" : "/el/enrollment"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {nav.enrollment}
             </Link>
             <Link
-              href={`/${lang}/contact`}
+              href={lang === "bg" ? "/contact" : "/el/contact"}
               className="text-xl font-medium text-foreground hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >

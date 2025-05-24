@@ -33,7 +33,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
 
       <Header dictionary={dictionary} lang={lang} />
 
-      {/* Hero Section with Background Image (fallback for video) */}
+      {/* Hero Section with Background Image */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background Image */}
         <div
@@ -63,19 +63,19 @@ export default async function Home({ params: { lang } }: { params: { lang: Local
             style={{ animationDelay: "0.4s" }}
           >
             <Link
-              href={`/${lang}/about`}
+              href={lang === "bg" ? "/about" : "/el/about"}
               className="inline-flex items-center justify-center bg-primary hover:bg-primary/90 text-white text-lg px-8 py-4 rounded-md transition-colors hover-particle-trigger"
             >
               {dictionary.home.learnMore}
             </Link>
             <Link
-              href={`/${lang}/enrollment`}
+              href={lang === "bg" ? "/enrollment" : "/el/enrollment"}
               className="inline-flex items-center justify-center bg-white text-primary border border-primary hover:bg-primary/10 text-lg px-8 py-4 rounded-md transition-colors hover-particle-trigger"
             >
               {dictionary.home.enrollChild}
             </Link>
             <Link
-              href={`/${lang}/gallery`}
+              href={lang === "bg" ? "/gallery" : "/el/gallery"}
               className="inline-flex items-center justify-center bg-white text-primary border border-primary hover:bg-primary/10 text-lg px-8 py-4 rounded-md transition-colors hover-particle-trigger"
             >
               {dictionary.home.viewGallery}

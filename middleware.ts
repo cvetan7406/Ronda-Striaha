@@ -45,11 +45,16 @@ export function middleware(request: NextRequest) {
   try {
     const pathname = request.nextUrl.pathname
 
-    // Skip middleware for static files and API routes
+    // Skip middleware for static files, API routes, and assets
     if (
       pathname.startsWith("/_next") ||
       pathname.startsWith("/api") ||
       pathname.startsWith("/_vercel") ||
+      pathname.startsWith("/favicon") ||
+      pathname.startsWith("/images/") ||
+      pathname.startsWith("/documents/") ||
+      pathname.startsWith("/videos/") ||
+      pathname.startsWith("/placeholder.svg") ||
       pathname.includes(".") // Skip files with extensions
     ) {
       return NextResponse.next()
@@ -67,7 +72,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    // Handle paths that start with /bg - rewrite to remove /bg prefix
+    // Handle paths that start with /bg - rewrite to remove /bg prefix for clean URLs
     if (pathname.startsWith("/bg")) {
       const newPath = pathname.replace("/bg", "") || "/"
       const url = request.nextUrl.clone()
@@ -95,7 +100,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next, api, _vercel) and files with extensions
-    "/((?!_next|api|_vercel|.*\\..*).*)",
+    // Skip all internal paths (_next, api, _vercel), static assets, and files with extensions
+    "/((?!_next|api|_vercel|favicon|images|documents|videos|placeholder\\.svg|.*\\..*).*)",
   ],
 }
