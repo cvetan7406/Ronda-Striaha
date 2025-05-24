@@ -55,23 +55,41 @@ export function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    // Check if the pathname already has a locale
-    const pathnameHasLocale = locales.some((locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
+    // Handle root path - rewrite to /bg internally
+    if (pathname === "/") {
+      const url = request.nextUrl.clone()
+      url.pathname = "/bg"
+      return NextResponse.rewrite(url)
+    }
 
-    if (pathnameHasLocale) {
+    // Handle paths that start with /el (Greek)
+    if (pathname.startsWith("/el")) {
       return NextResponse.next()
     }
 
-    // Redirect if there is no locale in the pathname
-    const locale = getLocale(request)
-    const newUrl = new URL(`/${locale}${pathname}`, request.url)
+    // Handle paths that start with /bg - rewrite to remove /bg prefix
+    if (pathname.startsWith("/bg")) {
+      const newPath = pathname.replace("/bg", "") || "/"
+      const url = request.nextUrl.clone()
+      url.pathname = newPath
+      return NextResponse.redirect(url)
+    }
 
-    return NextResponse.redirect(newUrl)
+    // For any other path, check if it should be treated as Bulgarian (default)
+    // If the path doesn't start with /el, treat it as Bulgarian
+    if (!pathname.startsWith("/el")) {
+      const url = request.nextUrl.clone()
+      url.pathname = `/bg${pathname}`
+      return NextResponse.rewrite(url)
+    }
+
+    return NextResponse.next()
   } catch (error) {
     console.error("Middleware error:", error)
-    // Fallback to default locale on error
-    const newUrl = new URL(`/${defaultLocale}${request.nextUrl.pathname}`, request.url)
-    return NextResponse.redirect(newUrl)
+    // Fallback to rewriting to default locale
+    const url = request.nextUrl.clone()
+    url.pathname = `/bg${request.nextUrl.pathname}`
+    return NextResponse.rewrite(url)
   }
 }
 

@@ -41,6 +41,16 @@ export default function RootLayout({
 
   return (
     <html lang={validatedLang}>
+      <head>
+        {/* Add canonical URLs for SEO */}
+        {validatedLang === "bg" && <link rel="canonical" href="/" />}
+        {validatedLang === "el" && <link rel="canonical" href="/el" />}
+
+        {/* Add hreflang for SEO */}
+        <link rel="alternate" hrefLang="bg" href="/" />
+        <link rel="alternate" hrefLang="el" href="/el" />
+        <link rel="alternate" hrefLang="x-default" href="/" />
+      </head>
       <body className={montserrat.className}>
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         <ClickParticles />
