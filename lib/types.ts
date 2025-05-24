@@ -30,3 +30,8 @@ export interface Dictionary {
     el: string
   }
 }
+
+// Utility function to validate locale
+export function isValidLocale(locale: string): locale is Locale {
+  return ["bg", "el"].includes(locale)
+}

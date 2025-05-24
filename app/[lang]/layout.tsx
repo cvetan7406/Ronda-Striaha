@@ -24,17 +24,25 @@ export async function generateStaticParams() {
   return [{ lang: "bg" }, { lang: "el" }]
 }
 
+// Validate params
+function isValidLocale(locale: string): locale is Locale {
+  return ["bg", "el"].includes(locale)
+}
+
 export default function RootLayout({
   children,
   params,
 }: {
   children: React.ReactNode
-  params: { lang: Locale }
+  params: { lang: string }
 }) {
+  // Validate and fallback locale
+  const validatedLang: Locale = isValidLocale(params.lang) ? params.lang : "bg"
+
   return (
-    <html lang={params.lang}>
+    <html lang={validatedLang}>
       <body className={montserrat.className}>
-        <Suspense>{children}</Suspense>
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         <ClickParticles />
         <Analytics />
         <SpeedInsights />
