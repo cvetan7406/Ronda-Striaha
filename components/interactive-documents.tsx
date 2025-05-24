@@ -92,6 +92,11 @@ export default function InteractiveDocuments({ dictionary, lang }: InteractiveDo
                   src={doc.image || "/placeholder.svg"}
                   alt={doc.title}
                   className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-300"
+                  onError={(e) => {
+                    // Fallback to placeholder if image fails to load
+                    const target = e.target as HTMLImageElement
+                    target.src = "/placeholder.svg?height=300&width=400&text=" + encodeURIComponent(doc.title)
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300"></div>
                 <div className="absolute top-4 left-4 bg-white/90 p-3 rounded-full text-primary">{doc.icon}</div>
@@ -160,6 +165,9 @@ export default function InteractiveDocuments({ dictionary, lang }: InteractiveDo
                     src="/documents/mecana-story.html"
                     className="w-full h-[600px] border-0 rounded"
                     title="Първи пролетен ден на Мецана"
+                    onError={() => {
+                      console.error("Failed to load document")
+                    }}
                   />
                 )}
 
@@ -169,6 +177,10 @@ export default function InteractiveDocuments({ dictionary, lang }: InteractiveDo
                       src="/images/invitation-may24.jpg"
                       alt="Покана за 24 май 2025"
                       className="max-w-full h-auto mx-auto rounded-lg shadow-lg"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = "/placeholder.svg?height=600&width=800&text=Покана за 24 май 2025"
+                      }}
                     />
                   </div>
                 )}

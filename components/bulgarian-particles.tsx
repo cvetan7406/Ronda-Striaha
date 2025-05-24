@@ -2,8 +2,60 @@
 
 import { useEffect, useRef } from "react"
 
-const BulgarianParticles = () => {
+interface BulgarianParticle {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  size: number
+  opacity: number
+  letter: string
+  rotation: number
+  rotationSpeed: number
+}
+
+interface BulgarianParticlesProps {
+  density?: number
+  speed?: number
+}
+
+export default function BulgarianParticles({ density = 20, speed = 0.2 }: BulgarianParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const particlesRef = useRef<BulgarianParticle[]>([])
+  const animationRef = useRef<number>()
+
+  const bulgarianLetters = [
+    "А",
+    "Б",
+    "В",
+    "Г",
+    "Д",
+    "Е",
+    "Ж",
+    "З",
+    "И",
+    "Й",
+    "К",
+    "Л",
+    "М",
+    "Н",
+    "О",
+    "П",
+    "Р",
+    "С",
+    "Т",
+    "У",
+    "Ф",
+    "Х",
+    "Ц",
+    "Ч",
+    "Ш",
+    "Щ",
+    "Ъ",
+    "Ь",
+    "Ю",
+    "Я",
+  ]
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -12,100 +64,96 @@ const BulgarianParticles = () => {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    let particlesArray: Particle[] = []
-    const numberOfParticles = 100
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    window.addEventListener("resize", () => {
+    const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
-    })
+    }
 
-    class Particle {
-      x: number
-      y: number
-      directionX: number
-      directionY: number
-      size: number
-      color: string
-
-      constructor(x: number, y: number) {
-        this.x = x
-        this.y = y
-        this.directionX = Math.random() * 5 - 2.5
-        this.directionY = Math.random() * 5 - 2.5
-        this.size = Math.random() * 5 + 1
-        this.color = "rgba(255,255,255,0.8)"
-      }
-
-      draw() {
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false)
-        ctx.fillStyle = this.color
-        ctx.fill()
-      }
-
-      update() {
-        if (this.x > canvas.width || this.x < 0) {
-          this.directionX = -this.directionX
-        }
-        if (this.y > canvas.height || this.y < 0) {
-          this.directionY = -this.directionY
-        }
-
-        this.x += this.directionX
-        this.y += this.directionY
-        this.draw()
+    const createParticle = (): BulgarianParticle => {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * speed,
+        vy: (Math.random() - 0.5) * speed,
+        size: Math.random() * 20 + 15,
+        opacity: Math.random() * 0.3 + 0.1,
+        letter: bulgarianLetters[Math.floor(Math.random() * bulgarianLetters.length)],
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.02,
       }
     }
 
-    function init() {
-      particlesArray = []
-      for (let i = 0; i < numberOfParticles; i++) {
-        const x = Math.random() * canvas.width
-        const y = Math.random() * canvas.height
-        particlesArray.push(new Particle(x, y))
+    const initParticles = () => {
+      particlesRef.current = []
+      for (let i = 0; i < density; i++) {
+        particlesRef.current.push(createParticle())
       }
     }
 
-    function animate() {
-      requestAnimationFrame(animate)
+    const drawParticle = (particle: BulgarianParticle) => {
+      ctx.save()
+      ctx.globalAlpha = particle.opacity
+      ctx.fillStyle = "#dc2626"
+      ctx.font = `${particle.size}px serif`
+      ctx.textAlign = "center"
+      ctx.textBaseline = "middle"
+
+      ctx.translate(particle.x, particle.y)
+      ctx.rotate(particle.rotation)
+      ctx.fillText(particle.letter, 0, 0)
+
+      ctx.restore()
+    }
+
+    const updateParticle = (particle: BulgarianParticle) => {
+      particle.x += particle.vx
+      particle.y += particle.vy
+      particle.rotation += particle.rotationSpeed
+
+      // Bounce off edges
+      if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
+      if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
+
+      // Keep particles in bounds
+      particle.x = Math.max(0, Math.min(canvas.width, particle.x))
+      particle.y = Math.max(0, Math.min(canvas.height, particle.y))
+
+      // Fade effect
+      particle.opacity += (Math.random() - 0.5) * 0.005
+      particle.opacity = Math.max(0.05, Math.min(0.4, particle.opacity))
+    }
+
+    const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update()
-      }
-      connect()
+      particlesRef.current.forEach((particle) => {
+        updateParticle(particle)
+        drawParticle(particle)
+      })
+
+      animationRef.current = requestAnimationFrame(animate)
     }
 
-    function connect() {
-      let opacityValue = 1
-      for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-          const distance = Math.sqrt(
-            (particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x) +
-              (particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y),
-          )
-          if (distance < 150) {
-            opacityValue = 1 - distance / 150
-            ctx.strokeStyle = "rgba(255,255,255," + opacityValue + ")"
-            ctx.lineWidth = 0.5
-            ctx.beginPath()
-            ctx.moveTo(particlesArray[a].x, particlesArray[a].y)
-            ctx.lineTo(particlesArray[b].x, particlesArray[b].y)
-            ctx.stroke()
-          }
-        }
-      }
+    const handleResize = () => {
+      resizeCanvas()
+      initParticles()
     }
 
-    init()
+    resizeCanvas()
+    initParticles()
     animate()
-  }, [])
 
-  return <canvas ref={canvasRef} style={{ position: "fixed", top: 0, left: 0, zIndex: -1 }} />
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [density, speed])
+
+  return (
+    <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ background: "transparent" }} />
+  )
 }
-
-export default BulgarianParticles

@@ -51,11 +51,20 @@ export function middleware(request: NextRequest) {
       pathname.startsWith("/api") ||
       pathname.startsWith("/_vercel") ||
       pathname.startsWith("/favicon") ||
-      pathname.startsWith("/images/") ||
-      pathname.startsWith("/documents/") ||
-      pathname.startsWith("/videos/") ||
+      pathname.startsWith("/images") ||
+      pathname.startsWith("/documents") ||
+      pathname.startsWith("/videos") ||
       pathname.startsWith("/placeholder.svg") ||
-      pathname.includes(".") // Skip files with extensions
+      pathname.includes(".ico") ||
+      pathname.includes(".jpg") ||
+      pathname.includes(".jpeg") ||
+      pathname.includes(".png") ||
+      pathname.includes(".gif") ||
+      pathname.includes(".svg") ||
+      pathname.includes(".html") ||
+      pathname.includes(".pdf") ||
+      pathname.includes(".mp4") ||
+      pathname.includes(".webm")
     ) {
       return NextResponse.next()
     }
@@ -101,6 +110,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Skip all internal paths (_next, api, _vercel), static assets, and files with extensions
-    "/((?!_next|api|_vercel|favicon|images|documents|videos|placeholder\\.svg|.*\\..*).*)",
+    "/((?!_next|api|_vercel|favicon|images|documents|videos|.*\\.(ico|jpg|jpeg|png|gif|svg|html|pdf|mp4|webm)).*)",
   ],
 }
