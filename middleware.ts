@@ -109,7 +109,16 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next, api, _vercel), static assets, and files with extensions
-    "/((?!_next|api|_vercel|favicon|images|documents|videos|.*\\.(ico|jpg|jpeg|png|gif|svg|html|pdf|mp4|webm)).*)",
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - images (image files)
+     * - documents (document files)
+     * - videos (video files)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|images|documents|videos).*)",
   ],
 }
